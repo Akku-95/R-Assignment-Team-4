@@ -1,0 +1,107 @@
+---
+title: "R Assignment - Team 4"
+output:
+  pdf_document: default
+  html_document: default
+date: "2022-08-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(readxl)
+
+#Selecting directory to work with
+directory <- "C:/Users/HP/Documents"
+
+#Accessing the Dataset pseudo_facebook
+pseudo_facebook <- read_excel("C:/Users/HP/Documents/pseudo_facebook.xlsx")
+
+#List the variables in your dataset
+names(pseudo_facebook)
+
+#Print the structure of your dataset
+str(pseudo_facebook)
+
+#Print the top 15 rows of your dataset
+head(pseudo_facebook,n=15)
+
+#Write a user defined function using any of the variables from the data set.
+fdata = function(fd)
+{
+  result = mean(pseudo_facebook$age)
+  return(result)
+}
+print(fdata(pseudo_facebook))
+
+
+View(pseudo_facebook)
+str(pseudo_facebook)
+
+#Use data manipulation techniques and filter rows based on any logical criteria that exist in your dataset.
+library(dplyr)
+filtered_data <- filter(pseudo_facebook, gender == "female", between(age,17,19))
+View(filtered_data)
+
+#Identify the dependent & independent variables and use reshaping techniques and create a new data frame by joining those variables from your dataset.
+pseudo_facebook.df = cbind(pseudo_facebook$age, pseudo_facebook$dob_year)
+View(pseudo_facebook.df)
+pseudo_facebook.df <- t(pseudo_facebook.df)
+pseudo_facebook.df
+
+#Remove missing values in your dataset.
+is.na(pseudo_facebook)
+na.omit(pseudo_facebook)
+
+
+library(dplyr)
+#Open the dataset
+df1 = read.table("pseudo_facebook.tsv", sep="\t", header=TRUE)
+
+#Identify and remove duplicated data in your dataset
+duplicated(df1)
+df2=unique(df1)
+print(df2)
+
+#Rename some of the column names in your dataset
+colnames(df1)[3]<-"dob_date"
+
+#Reorder multiple rows in descending order
+df1<-arrange(df1,desc(age))
+print(df1)
+
+#Add new variables in your data frame by using a mathematical function 
+library(tidyverse)
+F_M2 = as.data.frame(pseudo_facebook  %>%  mutate(tenure_new=tenure*2))
+head(F_M2, n=10)
+
+#Create a training set using random number generator engine.
+Sample <- pseudo_facebook[sample(nrow(pseudo_facebook), 5), ] # pick 5 random rows from dataset
+Sample
+
+#Print the summary statistics of your dataset
+summary(pseudo_facebook)
+
+#Statistical Functions Mean, Median and Mode
+mean(pseudo_facebook$age)
+median(pseudo_facebook$age)
+range(pseudo_facebook$age)
+getmode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+getmode(pseudo_facebook$age)
+
+#Plot a scatter plot for any 2 variables in your dataset
+ggplot(pseudo_facebook, aes(x = age, y = friend_count)) + geom_col(position = "dodge")
+
+#Plot a bar plot for any 2 variables in your dataset
+ggplot(pseudo_facebook, aes(x=age, y=friend_count))+geom_point()
+
+```
+
+
